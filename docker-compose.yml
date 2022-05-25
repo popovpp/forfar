@@ -17,6 +17,11 @@ services:
     ports:
       - "6379:6379"
     network_mode: host
+  wkhtmltopdf:
+    image: openlabs/docker-wkhtmltopdf-aas
+    ports:
+      - "8100:800"
+    network_mode: host
 
   # web:
   #   build:
