@@ -24,8 +24,8 @@ class Printer(models.Model):
 class Check(models.Model):
 
     def files_directory_path(instance, filename):
-        filename = str(instance.order['key']) + '_' + str(instance.type) + '.pdf'
-        return 'avatar_img/{0}'.format(filename)
+        filename = str(instance.order['id']) + '_' + str(instance.type) + '.pdf'
+        return 'media/pdf/{0}'.format(filename)
 
     printer_id = models.ForeignKey(Printer, on_delete=models.CASCADE, 
                                    verbose_name='Принтер')
