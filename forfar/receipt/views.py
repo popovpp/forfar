@@ -29,3 +29,13 @@ class NewChecksView(APIView):
         data = request.query_params
 
         return Response(data, status=status.HTTP_200_OK)
+
+
+class CheckView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = CheckSerializer
+
+    def get(self, request):
+        data = request.query_params
+
+        return Response(data, status=status.HTTP_200_OK)
