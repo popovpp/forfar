@@ -1,6 +1,17 @@
 from django.db import models
 
 
+# Константы типов чеков
+CLIENT_CHECK = 'client'
+KITCHEN_CHECK = 'kitchen'
+
+
+# Константы статусов чеков
+NEW = 'new'
+RENDERED = 'rendered'
+PRINTED = 'printed'
+
+
 class Printer(models.Model):
 
     name = models.CharField(max_length=255, verbose_name='Наименование принтера')

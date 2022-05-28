@@ -7,6 +7,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Check
         fields = ['order']
+        required_fields = ['order']
 
 
 class CheckSerializer(serializers.ModelSerializer):

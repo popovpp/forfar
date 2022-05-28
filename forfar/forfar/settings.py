@@ -44,8 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    "django_rq",
 
-    'receipt'
+    'receipt',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'forfar.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,10 +91,6 @@ DATABASES = {
         'PASSWORD': os.environ.get('API_PG_PASSWORD'),
         'HOST': os.environ.get('API_PG_HOST'),
         'PORT': os.environ.get('API_PG_PORT'),
-#        'OPTIONS': {
-#            'sslmode': 'verify-full',
-#            'sslrootcert': os.path.join(BASE_DIR, 'postgres_ssl.crt')
-#        },
     }
 }
 
@@ -146,3 +143,28 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+
+# Redis
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': '',
+        'DEFAULT_TIMEOUT': 360,
+    },
+    'high': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'),
+        'DEFAULT_TIMEOUT': 500,
+    },
+    'low': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+    }
+}
+
+
+CLIENT_CHECK = 'templates/client_check.html'
+KITCHEN_CHECK = 'templates/kitchen_check.html'
