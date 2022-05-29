@@ -63,9 +63,9 @@ class NewChecksView(APIView):
     def get(self, request):
         data = request.query_params
 
-        if not data:
+        if not data or data.get('api_key') is None:
             raise ValidationError(
-                {"error":f'Параметр api_keq не передан'}
+                {"error":f'Параметр api_key не передан'}
             )
         
         checks = Check.objects.select_related("printer_id").all()
