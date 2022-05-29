@@ -7,6 +7,8 @@ from rest_framework.exceptions import (NotFound, ValidationError,
                                        NotAuthenticated)
 from django.template import Context, Template
 from django.conf import settings
+from django.http import FileResponse
+from django.core.exceptions import ObjectDoesNotExist
 
 from receipt.serializers import OrderSerializer
 from receipt.models import (Check, Printer, CLIENT_CHECK, KITCHEN_CHECK,
@@ -55,6 +57,11 @@ class NewChecksView(APIView):
 
     def get(self, request):
         data = request.query_params
+
+        if not getattr(data['api_key'], None):
+            raise ValidationError(
+                {"error":f'Параметр api_keq не передан'}
+            )
         
         checks = Check.objects.select_related("printer_id").all()
 
@@ -81,21 +88,18 @@ class CheckView(APIView):
     def get(self, request):
         data = request.query_params
 
-        check = Check.objects.select_related(
+        try:
+            check = Check.objects.select_related(
                                     "printer_id"
-                               ).get(id=data['check_id'])
-        if not check:
+                                  ).get(id=data['check_id'])
+        except ObjectDoesNotExist: 
             raise ValidationError(
-                {"error":f'Чек с id={data["id"]} не существует.'}
+                {"error":f'Чек с id={data["check_id"]} не существует.'}
             )
 
         printers = Printer.objects.filter(api_key=str(data['api_key']))
         if not printers:
             raise NotAuthenticated({"error": "Ошибка авторизации"})
-        
-        with open(check.pdf_file.path, "rb") as report:
-            return Response(
-                report.read(),
-                headers={'Content-Disposition':
-                    f'attachment; filename={check.pdf_file.file.name}'},
-                content_type='application/pdf')
+
+        return FileResponse(open(check.pdf_file.path, "rb"),
+                            as_attachment=True, filename=check.pdf_file.path)
