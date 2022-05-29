@@ -23,6 +23,11 @@ class CreateChecksView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        if not serializer.data['order']:
+            raise ValidationError(
+                {"error":f'Параметр order не может быть null'}
+            )
         data = serializer.data['order']
 
         printers = Printer.objects.filter(point_id=data['point_id']).all()
@@ -58,7 +63,7 @@ class NewChecksView(APIView):
     def get(self, request):
         data = request.query_params
 
-        if not getattr(data['api_key'], None):
+        if not data:
             raise ValidationError(
                 {"error":f'Параметр api_keq не передан'}
             )
