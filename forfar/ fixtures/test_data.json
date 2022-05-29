@@ -1,0 +1,82 @@
+[
+  {
+    "model": "receipt.Printer",
+    "pk": 1,
+    "fields": {
+      "name": "HP1000",
+      "api_key": "1111",
+      "check_type": "client",
+      "point_id": 1
+    }
+  },
+  {
+    "model": "receipt.Printer",
+    "pk": 2,
+    "fields": {
+      "name": "Epson 312",
+      "api_key": "2222",
+      "check_type": "kitchen",
+      "point_id": 1
+    }
+  },
+  {
+    "model": "receipt.Printer",
+    "pk": 3,
+    "fields": {
+      "name": "HP1000",
+      "api_key": "3333",
+      "check_type": "client",
+      "point_id": 2
+    }
+  },
+  {
+    "model": "receipt.Printer",
+    "pk": 4,
+    "fields": {
+      "name": "Epson 312",
+      "api_key": "4444",
+      "check_type": "kitchen",
+      "point_id": 2
+    }
+  },
+  {
+    "model": "receipt.Printer",
+    "pk": 5,
+    "fields": {
+      "name": "HP1000",
+      "api_key": "5555",
+      "check_type": "client",
+      "point_id": 3
+    }
+  },
+  {
+    "model": "receipt.Printer",
+    "pk": 6,
+    "fields": {
+      "name": "Epson 312",
+      "api_key": "6666",
+      "check_type": "kitchen",
+      "point_id": 3
+    }
+  },
+  {
+    "model": "receipt.Printer",
+    "pk": 7,
+    "fields": {
+      "name": "HP1000",
+      "api_key": "7777",
+      "check_type": "client",
+      "point_id": 4
+    }
+  },
+  {
+    "model": "receipt.Printer",
+    "pk": 7,
+    "fields": {
+      "name": "Epson 312",
+      "api_key": "7777",
+      "check_type": "kitchen",
+      "point_id": 4
+    }
+  }
+]
