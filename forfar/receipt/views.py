@@ -93,6 +93,16 @@ class CheckView(APIView):
     def get(self, request):
         data = request.query_params
 
+        if not data or data.get('api_key') is None:
+            raise ValidationError(
+                {"error":f'Параметр api_key не передан'}
+            )
+
+        if not data or data.get('check_id') is None:
+            raise ValidationError(
+                {"error":f'Параметр check_id не передан'}
+            )
+
         try:
             check = Check.objects.select_related(
                                     "printer_id"
@@ -103,8 +113,11 @@ class CheckView(APIView):
             )
 
         printers = Printer.objects.filter(api_key=str(data['api_key']))
-        if not printers:
+        if not printers or str(data['api_key']) != check.printer_id.api_key:
             raise NotAuthenticated({"error": "Ошибка авторизации"})
+
+        check.status = PRINTED
+        check.save()
 
         return FileResponse(open(check.pdf_file.path, "rb"),
                             as_attachment=True, filename=check.pdf_file.path)
