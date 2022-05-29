@@ -32,13 +32,12 @@ class CreateChecksView(APIView):
         context = set_context(data)
         for printer in printers:
             if printer.check_type == CLIENT_CHECK:
-                check = set_check(data, printer, CLIENT_CHECK)
                 check_template = Template(open(settings.CLIENT_CHECK).read())
             elif printer.check_type == KITCHEN_CHECK:
-                check = set_check(data, printer, KITCHEN_CHECK)
                 check_template = Template(open(settings.KITCHEN_CHECK).read())
-            check_generator.delay(check_template.render(context))
+            check = set_check(data, printer)
             check.save()
+            check_generator.delay(check_template.render(context), check)
 
         return Response({"ok": "Чеки успешно созданы"}, status=status.HTTP_200_OK)
 

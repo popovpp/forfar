@@ -16,7 +16,7 @@ class PrinterModelAdmin(admin.ModelAdmin):
 class CheckModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'printer_id', 'type', 'order', 'status', 'pdf_file']
     list_display_links = ['id']
-    list_filter = ['printer_id', 'type', 'order', 'status', 'pdf_file']
+    list_filter = ['printer_id', 'type', 'status']
     search_fields = ['printer_id', 'type', 'order', 'status', 'pdf_file']
 
     class Meta:

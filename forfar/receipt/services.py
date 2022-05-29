@@ -2,26 +2,29 @@ from django_rq import job
 from django.template import Context
 import json
 import requests
+from django.core.files import File
 
 from receipt.models import (CLIENT_CHECK, KITCHEN_CHECK, NEW, RENDERED,
 	                 PRINTED, Check)
+from django.conf import settings
 
 @job
-def check_generator(check_template):
+def check_generator(check_template, check):
     
-	url = 'http://localhost:80/'
+    url = settings.WKHTMLTOPDF_URL
 
-	data = {
-	    'contents': check_template,#.encode('utf8'),
-	}
-	headers = {
-	    'Content-Type': 'application/json',    # This is important
-	}
-	response = requests.post(url, data=data)#, headers=headers)
+    fp = bytes(check_template.encode('utf8'))
+    files = {'file': fp}
+    response = requests.post(url, files=files)
+    
+    filename = str(check.order['id']) + '_' + check.type + '.pdf'
 
-	# Save the response contents to a file
-	with open('media/pdf/file.pdf', 'wb') as f:
-	    f.write(response.content)
+    with open(settings.MEDIA_ROOT + '/' + settings.PDF_CHECKS_PATH +
+              filename, 'wb') as f:
+        f.write(response.content)
+        check.pdf_file = settings.PDF_CHECKS_PATH + filename
+        check.status = RENDERED
+        check.save()
 
 
 def set_context(data):
@@ -35,11 +38,11 @@ def set_context(data):
 	})
 
 
-def set_check(data, printer, check_type):
+def set_check(data, printer):
 
 	return Check(
         printer_id = printer,
-        type = check_type,
+        type = printer.check_type,
         order = data,
         status = NEW,
         pdf_file = None

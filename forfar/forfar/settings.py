@@ -133,6 +133,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -166,5 +170,14 @@ RQ_QUEUES = {
 }
 
 
+# Paths to template of checks
 CLIENT_CHECK = 'templates/client_check.html'
 KITCHEN_CHECK = 'templates/kitchen_check.html'
+
+
+#URL fo wkhtmltopdf
+WKHTMLTOPDF_URL = 'http://localhost:80/'
+
+
+# Paths of checks to print
+PDF_CHECKS_PATH = 'pdf/'
